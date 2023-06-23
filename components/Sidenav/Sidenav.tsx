@@ -1,5 +1,7 @@
+"use client";
+
 import { useSidenavContext } from "@/contexts/sidenav-context";
-import { forwardRef } from "react";
+import { forwardRef, useCallback, useEffect, useState } from "react";
 
 export type SidenavProps = React.HTMLAttributes<HTMLDivElement> & {
   children?: React.ReactNode;
@@ -7,19 +9,107 @@ export type SidenavProps = React.HTMLAttributes<HTMLDivElement> & {
 
 const Sidenav = forwardRef<HTMLDivElement, SidenavProps>(
   ({ className, style, ...props }, ref) => {
-    const { width: sidenavWidth } = useSidenavContext();
+    const [resizeEvent, setResizeEvent] = useState({
+      isResizing: false,
+
+      // used to calculate new width relative to starting width and mouse x
+      startingCursorX: 0,
+      startingWidth: 0,
+    });
+
+    const { width: sidenavWidth, setWidth: setSidenavWidth } =
+      useSidenavContext();
+
+    useEffect(() => {}, [resizeEvent]);
+
+    // the resize event is stopped based on window events
+    // to account for when the user releases the mouse while
+    // not hovering on the sidenav
+    useEffect(() => {
+      window.addEventListener("mouseup", (_event) => {
+        stopResizing();
+      });
+    }, []);
+
+    const resize = useCallback(
+      (event: MouseEvent) => {
+        const cursorDeltaX = event.clientX - resizeEvent.startingCursorX;
+
+        const newWidth = resizeEvent.startingWidth + cursorDeltaX;
+
+        setSidenavWidth(newWidth);
+      },
+      [resizeEvent, setSidenavWidth]
+    );
+
+    // the resize event is stopped based on window events
+    // to account for when the user releases the mouse while
+    // not hovering on the sidenav
+    useEffect(() => {
+      if (!resizeEvent.isResizing) {
+        return;
+      }
+
+      window.addEventListener("mousemove", resize);
+
+      return () => {
+        window.removeEventListener("mousemove", resize);
+      };
+    }, [resize, resizeEvent.isResizing]);
+
+    const startResizing = (event: React.MouseEvent<HTMLDivElement>) => {
+      setResizeEvent({
+        isResizing: true,
+        startingCursorX: event.nativeEvent.clientX,
+        startingWidth: sidenavWidth,
+      });
+    };
+
+    const stopResizing = () => {
+      setResizeEvent((prevEvent) => ({
+        ...prevEvent,
+        isResizing: false,
+      }));
+    };
 
     return (
       <div
         {...props}
         ref={ref}
-        className={`flex h-[100vh] flex-col items-center justify-center bg-blue-500 ${className}`}
+        className={`relative  h-[100vh] ${className}`}
         style={{
           flexBasis: sidenavWidth,
           ...style,
         }}
       >
-        {props.children}
+        {/* Sidenav Body */}
+        <div className="flex h-full w-full flex-col items-center justify-center bg-gray-200">
+          {props.children}
+        </div>
+
+        {/* Resize Handle */}
+        <div
+          onMouseDown={startResizing}
+          className="
+            absolute
+            right-0
+            top-0
+            h-full
+            border-r-2
+            border-r-zinc-400
+            transition
+            duration-100
+            before:absolute
+            before:top-0
+            before:h-full
+            before:w-[30px]
+            before:translate-x-[-50%]
+            before:cursor-col-resize
+            before:opacity-20
+            before:content-['']
+            hover:border-r-blue-500
+          "
+        />
       </div>
     );
   }
