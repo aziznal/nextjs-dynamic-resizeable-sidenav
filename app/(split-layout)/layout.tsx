@@ -1,3 +1,5 @@
+"use client";
+
 import Sidenav from "@/components/Sidenav/Sidenav";
 
 export default function Layout_SplitLayout({
@@ -7,7 +9,7 @@ export default function Layout_SplitLayout({
 }) {
   return (
     <div className="relative flex min-h-full">
-      <Sidenav className="sticky top-0 flex h-[100vh] basis-96 flex-col items-center justify-center bg-blue-500">
+      <Sidenav className="sticky top-0">
         <h1 className="text-4xl font-bold text-white">Sidenav</h1>
       </Sidenav>
 
