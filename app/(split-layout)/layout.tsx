@@ -11,7 +11,7 @@ export default function Layout_SplitLayout({
         <h1 className="text-4xl font-bold">Sidenav</h1>
       </Sidenav>
 
-      <main className="flex flex-1 flex-col">{children}</main>
+      <main className="flex flex-1 flex-col overflow-clip">{children}</main>
     </div>
   );
 }
