@@ -1,34 +1,15 @@
 "use client";
 
-import { ReactNode, createContext, useContext, useState } from "react";
+import { ReactNode, createContext, useContext } from "react";
 
-export type SidenavContextProps = {
-  isVisible: boolean;
-  setVisibility: (isVisible: boolean) => void;
+export type SidenavContextProps = {};
 
-  width: number;
-  setWidth: (width: number) => void;
-};
-
-export const SidenavContext = createContext<SidenavContextProps>({
-  isVisible: true,
-  setVisibility: () => {},
-  width: 0,
-  setWidth: () => {},
-});
+export const SidenavContext = createContext<SidenavContextProps>({});
 
 export const useSidenavContext = () => useContext(SidenavContext);
 
 export const SidenavProvider = ({ children }: { children: ReactNode }) => {
-  const [isVisible, setIsVisible] = useState(true);
-
-  const [width, setWidth] = useState(400);
-
   return (
-    <SidenavContext.Provider
-      value={{ width, setWidth, isVisible, setVisibility: setIsVisible }}
-    >
-      {children}
-    </SidenavContext.Provider>
+    <SidenavContext.Provider value={{}}>{children}</SidenavContext.Provider>
   );
 };
