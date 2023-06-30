@@ -15,7 +15,16 @@ const Sidenav = forwardRef<HTMLDivElement, SidenavProps>(
       <div
         {...props}
         ref={ref}
-        className={`relative h-screen w-[400px] border-r-2 border-r-zinc-400 transition-all duration-[350ms] ease-out ${className}`}
+        className={`
+           relative
+           h-screen
+           border-r-2
+           border-r-zinc-400
+           transition-all
+           duration-[350ms]
+           ease-out
+           ${className}
+         `}
         style={{ ...style, width: isOpen ? "400px" : "100px" }}
       >
         {/* Sidenav Body */}
@@ -50,8 +59,10 @@ const Sidenav = forwardRef<HTMLDivElement, SidenavProps>(
             "
           onClick={toggleSidenav}
         >
-          {isOpen && <span className="material-icons">chevron_left</span>}
-          {!isOpen && <span className="material-icons">chevron_right</span>}
+          <span className="material-icons">
+            {isOpen && "chevron_left"}
+            {!isOpen && "chevron_right"}
+          </span>
         </button>
       </div>
     );
