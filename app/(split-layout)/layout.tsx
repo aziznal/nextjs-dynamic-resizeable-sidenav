@@ -1,6 +1,4 @@
-"use client";
-
-import Sidenav from "@/components/Sidenav/Sidenav";
+import Sidenav from "@/components/sidenav";
 
 export default function Layout_SplitLayout({
   children,
