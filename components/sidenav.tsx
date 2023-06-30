@@ -1,7 +1,7 @@
 "use client";
 
 import { useSidenavContext } from "@/contexts/sidenav-context";
-import { forwardRef, useCallback, useEffect, useState } from "react";
+import { forwardRef } from "react";
 
 export type SidenavProps = React.HTMLAttributes<HTMLDivElement> & {
   children?: React.ReactNode;
@@ -9,107 +9,25 @@ export type SidenavProps = React.HTMLAttributes<HTMLDivElement> & {
 
 const Sidenav = forwardRef<HTMLDivElement, SidenavProps>(
   ({ className, style, ...props }, ref) => {
-    const [resizeEvent, setResizeEvent] = useState({
-      isResizing: false,
-
-      // used to calculate new width relative to starting width and mouse x
-      startingCursorX: 0,
-      startingWidth: 0,
-    });
-
-    const { width: sidenavWidth, setWidth: setSidenavWidth } =
-      useSidenavContext();
-
-    useEffect(() => {}, [resizeEvent]);
-
-    // the resize event is stopped based on window events
-    // to account for when the user releases the mouse while
-    // not hovering on the sidenav
-    useEffect(() => {
-      window.addEventListener("mouseup", (_event) => {
-        stopResizing();
-      });
-    }, []);
-
-    const resize = useCallback(
-      (event: MouseEvent) => {
-        const cursorDeltaX = event.clientX - resizeEvent.startingCursorX;
-
-        const newWidth = resizeEvent.startingWidth + cursorDeltaX;
-
-        setSidenavWidth(newWidth);
-      },
-      [resizeEvent, setSidenavWidth]
-    );
-
-    // the resize event is stopped based on window events
-    // to account for when the user releases the mouse while
-    // not hovering on the sidenav
-    useEffect(() => {
-      if (!resizeEvent.isResizing) {
-        return;
-      }
-
-      window.addEventListener("mousemove", resize);
-
-      return () => {
-        window.removeEventListener("mousemove", resize);
-      };
-    }, [resize, resizeEvent.isResizing]);
-
-    const startResizing = (event: React.MouseEvent<HTMLDivElement>) => {
-      setResizeEvent({
-        isResizing: true,
-        startingCursorX: event.nativeEvent.clientX,
-        startingWidth: sidenavWidth,
-      });
-    };
-
-    const stopResizing = () => {
-      setResizeEvent((prevEvent) => ({
-        ...prevEvent,
-        isResizing: false,
-      }));
-    };
+    const { isOpen, toggleSidenav } = useSidenavContext();
 
     return (
       <div
         {...props}
         ref={ref}
-        className={`relative  h-[100vh] ${className}`}
-        style={{
-          flexBasis: sidenavWidth,
-          ...style,
-        }}
+        className={`relative h-[100vh] w-[400px] border-r-2 border-r-zinc-400 transition-all duration-200 ease-out ${className}`}
+        style={{ ...style, width: isOpen ? "400px" : "100px" }}
       >
         {/* Sidenav Body */}
-        <div className="flex h-full w-full flex-col items-center justify-center bg-gray-200">
+        <div className="flex h-full w-full flex-col items-center justify-center overflow-clip bg-gray-200">
           {props.children}
         </div>
 
-        {/* Resize Handle */}
-        <div
-          onMouseDown={startResizing}
-          className="
-            absolute
-            right-0
-            top-0
-            h-full
-            border-r-2
-            border-r-zinc-400
-            transition
-            duration-100
-            before:absolute
-            before:top-0
-            before:h-full
-            before:w-[30px]
-            before:translate-x-[-50%]
-            before:cursor-col-resize
-            before:opacity-20
-            before:content-['']
-            hover:border-r-blue-500
-          "
-        />
+        {/* Toggle Button */}
+        <button className="absolute right-0 top-20" onClick={toggleSidenav}>
+          {isOpen && <span className="material-icons">chevron_left</span>}
+          {!isOpen && <span className="material-icons">chevron_right</span>}
+        </button>
       </div>
     );
   }

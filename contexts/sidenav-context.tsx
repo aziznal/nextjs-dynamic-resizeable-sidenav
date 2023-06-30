@@ -3,30 +3,31 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
 export type SidenavContextProps = {
-  isVisible: boolean;
-  setVisibility: (isVisible: boolean) => void;
-
-  width: number;
-  setWidth: (width: number) => void;
+  isOpen: boolean;
+  openSidenav: () => void;
+  closeSidenav: () => void;
+  toggleSidenav: () => void;
 };
 
 export const SidenavContext = createContext<SidenavContextProps>({
-  isVisible: true,
-  setVisibility: () => {},
-  width: 0,
-  setWidth: () => {},
+  isOpen: true,
+  openSidenav: () => {},
+  closeSidenav: () => {},
+  toggleSidenav: () => {},
 });
 
 export const useSidenavContext = () => useContext(SidenavContext);
 
 export const SidenavProvider = ({ children }: { children: ReactNode }) => {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isOpen, setIsOpen] = useState(true);
 
-  const [width, setWidth] = useState(400);
+  const openSidenav = () => setIsOpen(true);
+  const closeSidenav = () => setIsOpen(false);
+  const toggleSidenav = () => setIsOpen((isOpen) => !isOpen);
 
   return (
     <SidenavContext.Provider
-      value={{ width, setWidth, isVisible, setVisibility: setIsVisible }}
+      value={{ isOpen, openSidenav, closeSidenav, toggleSidenav }}
     >
       {children}
     </SidenavContext.Provider>
