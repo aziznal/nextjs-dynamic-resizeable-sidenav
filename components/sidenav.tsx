@@ -9,7 +9,7 @@ export type SidenavProps = React.HTMLAttributes<HTMLDivElement> & {
 
 const Sidenav = forwardRef<HTMLDivElement, SidenavProps>(
   ({ className, style, ...props }, ref) => {
-    const { isOpen, toggleSidenav } = useSidenavContext();
+    const { isOpen, toggleOpen: toggleSidenav } = useSidenavContext();
 
     return (
       <div
