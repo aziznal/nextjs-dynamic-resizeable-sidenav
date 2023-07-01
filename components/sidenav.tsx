@@ -50,14 +50,11 @@ const Sidenav = forwardRef<HTMLDivElement, SidenavProps>(
     // to account for when the user releases the mouse while
     // not hovering on the sidenav
     useEffect(() => {
-      window.addEventListener("mouseup", (_event) => {
-        stopResizing();
-      });
+      window.addEventListener("mouseup", stopResizing);
+
+      return () => window.removeEventListener("mouseup", stopResizing);
     }, []);
 
-    // the resize event is stopped based on window events
-    // to account for when the user releases the mouse while
-    // not hovering on the sidenav
     useEffect(() => {
       if (!resizeEvent.isResizing) {
         return;
@@ -65,9 +62,7 @@ const Sidenav = forwardRef<HTMLDivElement, SidenavProps>(
 
       window.addEventListener("mousemove", resize);
 
-      return () => {
-        window.removeEventListener("mousemove", resize);
-      };
+      return () => window.removeEventListener("mousemove", resize);
     }, [resize, resizeEvent.isResizing]);
 
     return (
