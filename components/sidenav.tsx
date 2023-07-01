@@ -9,6 +9,9 @@ export type SidenavProps = React.HTMLAttributes<HTMLDivElement> & {
 
 const Sidenav = forwardRef<HTMLDivElement, SidenavProps>(
   ({ className, style, ...props }, ref) => {
+    const { width: sidenavWidth, setWidth: setSidenavWidth } =
+      useSidenavContext();
+
     const [resizeEvent, setResizeEvent] = useState({
       isResizing: false,
 
@@ -16,9 +19,6 @@ const Sidenav = forwardRef<HTMLDivElement, SidenavProps>(
       startingCursorX: 0,
       startingWidth: 0,
     });
-
-    const { width: sidenavWidth, setWidth: setSidenavWidth } =
-      useSidenavContext();
 
     const startResizing = (event: React.MouseEvent<HTMLDivElement>) => {
       setResizeEvent({
