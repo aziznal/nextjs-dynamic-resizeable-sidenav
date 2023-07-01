@@ -20,16 +20,13 @@ const Sidenav = forwardRef<HTMLDivElement, SidenavProps>(
     const { width: sidenavWidth, setWidth: setSidenavWidth } =
       useSidenavContext();
 
-    useEffect(() => {}, [resizeEvent]);
-
-    // the resize event is stopped based on window events
-    // to account for when the user releases the mouse while
-    // not hovering on the sidenav
-    useEffect(() => {
-      window.addEventListener("mouseup", (_event) => {
-        stopResizing();
+    const startResizing = (event: React.MouseEvent<HTMLDivElement>) => {
+      setResizeEvent({
+        isResizing: true,
+        startingCursorX: event.nativeEvent.clientX,
+        startingWidth: sidenavWidth,
       });
-    }, []);
+    };
 
     const resize = useCallback(
       (event: MouseEvent) => {
@@ -41,6 +38,22 @@ const Sidenav = forwardRef<HTMLDivElement, SidenavProps>(
       },
       [resizeEvent, setSidenavWidth]
     );
+
+    const stopResizing = () => {
+      setResizeEvent((prevEvent) => ({
+        ...prevEvent,
+        isResizing: false,
+      }));
+    };
+
+    // the resize event is stopped based on window events
+    // to account for when the user releases the mouse while
+    // not hovering on the sidenav
+    useEffect(() => {
+      window.addEventListener("mouseup", (_event) => {
+        stopResizing();
+      });
+    }, []);
 
     // the resize event is stopped based on window events
     // to account for when the user releases the mouse while
@@ -56,21 +69,6 @@ const Sidenav = forwardRef<HTMLDivElement, SidenavProps>(
         window.removeEventListener("mousemove", resize);
       };
     }, [resize, resizeEvent.isResizing]);
-
-    const startResizing = (event: React.MouseEvent<HTMLDivElement>) => {
-      setResizeEvent({
-        isResizing: true,
-        startingCursorX: event.nativeEvent.clientX,
-        startingWidth: sidenavWidth,
-      });
-    };
-
-    const stopResizing = () => {
-      setResizeEvent((prevEvent) => ({
-        ...prevEvent,
-        isResizing: false,
-      }));
-    };
 
     return (
       <div
