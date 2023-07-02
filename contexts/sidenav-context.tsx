@@ -46,6 +46,10 @@ export const SidenavProvider = ({ children }: { children: ReactNode }) => {
     });
   }, []);
 
+  useEffect(() => {
+    console.log(`stack updated! (${_stack.length})`, _stack);
+  }, [_stack]);
+
   return (
     <SidenavContext.Provider value={{ content, pushContent, popContent }}>
       {children}
