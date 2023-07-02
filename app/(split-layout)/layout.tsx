@@ -10,12 +10,12 @@ export default function Layout_SplitLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { setContent: setSidenavContent } = useSidenavContext();
+  const { pushContent } = useSidenavContext();
 
   // sets the default sidenav
   useEffect(() => {
-    setSidenavContent(<DefaultSidenav />);
-  }, [setSidenavContent]);
+    pushContent(<DefaultSidenav />);
+  }, [pushContent]);
 
   return (
     <div className="relative flex min-h-full">
