@@ -15,7 +15,7 @@ export const SidenavContext = createContext<SidenavContextProps>({
 export const useSidenavContext = () => useContext(SidenavContext);
 
 export const SidenavProvider = ({ children }: { children: ReactNode }) => {
-  const [content, setContent] = useState<ReactNode>(<div>Hello World!</div>);
+  const [content, setContent] = useState<ReactNode>();
 
   return (
     <SidenavContext.Provider value={{ content, setContent }}>

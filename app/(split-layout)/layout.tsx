@@ -1,16 +1,25 @@
+"use client";
+
 import Sidenav from "@/components/sidenav";
+import DefaultSidenav from "@/components/sidenav/default-sidenav";
+import { useSidenavContext } from "@/contexts/sidenav-context";
+import { useEffect } from "react";
 
 export default function Layout_SplitLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { setContent: setSidenavContent } = useSidenavContext();
+
+  // sets the default sidenav
+  useEffect(() => {
+    setSidenavContent(<DefaultSidenav />);
+  }, [setSidenavContent]);
+
   return (
     <div className="relative flex min-h-full">
-      <Sidenav className="sticky top-0">
-        <h1 className="text-4xl font-bold">Sidenav</h1>
-      </Sidenav>
-
+      <Sidenav className="sticky top-0" />
       <main className="flex flex-1 flex-col">{children}</main>
     </div>
   );
