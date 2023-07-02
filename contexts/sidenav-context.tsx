@@ -47,7 +47,7 @@ export const SidenavProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    console.log(`stack updated! (${_stack.length})`, _stack);
+    console.log(`stack updated! (length=${_stack.length})`, _stack);
   }, [_stack]);
 
   return (

@@ -37,6 +37,8 @@ const SidenavLink = forwardRef<HTMLAnchorElement, SidenavLinkProps>(
             isActive &&
             `
               bg-blue-200
+              text-blue-600
+
               before:absolute
               before:left-0
               before:h-[24px]

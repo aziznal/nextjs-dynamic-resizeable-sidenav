@@ -14,6 +14,7 @@ export default function Layout_SplitLayout({
 
   // sets the default sidenav
   useEffect(() => {
+    console.log("pushing default sidenav");
     pushContent(<DefaultSidenav />);
   }, [pushContent]);
 

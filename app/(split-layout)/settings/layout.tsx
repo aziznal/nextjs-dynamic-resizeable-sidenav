@@ -8,13 +8,10 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
   const { pushContent, popContent } = useSidenavContext();
 
   useEffect(() => {
-    pushContent(<SettingsSidenav/>);
+    console.log("pushing settings sidenav");
+    pushContent(<SettingsSidenav />);
     return () => popContent();
   }, [pushContent, popContent]);
-
-  // useEffect(() => {
-  //   return () => popContent();
-  // }, []);
 
   return children;
 }
